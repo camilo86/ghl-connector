@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import HighLevelLoginButton from "@/components/hl-login-button"
 import {
   Card,
   CardDescription,
@@ -26,7 +26,7 @@ export default function Home() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Button className="w-full">Login with HighLevel</Button>
+          <HighLevelLoginButton />
         </CardFooter>
       </Card>
     </div>
