@@ -16,15 +16,13 @@ export default function Home() {
             HighLevel Connector for ChatBotBuilder.AI
           </CardTitle>
           <CardDescription className="space-y-4">
-            <p>
-              Create HighLevel contacts, notes and more from within your Chat
-              Bot Builder AI flows.
-            </p>
-            <p>
-              To get started, make sure you have access to both your HighLevel
-              and Chat Bot Builder AI account. Once ready, start by logging in
-              to your HighLevel account below.
-            </p>
+            Create HighLevel contacts, notes and more from within your Chat Bot
+            Builder AI flows.
+            <br />
+            <br />
+            To get started, make sure you have access to both your HighLevel and
+            Chat Bot Builder AI account. Once ready, start by logging in to your
+            HighLevel account below.
           </CardDescription>
         </CardHeader>
         <CardFooter>
