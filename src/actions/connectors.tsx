@@ -1,10 +1,31 @@
 "use server"
 
+import db from "@/lib/db"
+import { getHighLevelAuthToken } from "@/services/highLevel"
 import { redirect } from "next/navigation"
 
 export async function createConnector(code: string, accountId: string) {
-  console.log("code", code)
-  console.log("accountId", accountId)
+  let nextPage = "/dashboard"
 
-  redirect("/dashboard")
+  try {
+    const authToken = await getHighLevelAuthToken(code)
+
+    await db.connector.create({
+      data: {
+        ChatBotBuilderAccountId: accountId,
+        highLevelLocationId: authToken.locationId,
+        highLevelAccessToken: authToken.access_token,
+        highLevelRefreshToken: authToken.refresh_token,
+      },
+    })
+  } catch (e) {
+    console.error(
+      `Failed creating connector. AccountId=${accountId}. Error=${e}`
+    )
+
+    // TODO: We probably want to pass an error message back to the user.
+    nextPage = "/"
+  } finally {
+    redirect(nextPage)
+  }
 }
