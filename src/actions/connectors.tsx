@@ -1,6 +1,7 @@
 "use server"
 
 import db from "@/lib/db"
+import { createSession } from "@/lib/sessions"
 import { getHighLevelAuthToken } from "@/services/highLevel"
 import { redirect } from "next/navigation"
 
@@ -10,7 +11,7 @@ export async function createConnector(code: string, accountId: string) {
   try {
     const authToken = await getHighLevelAuthToken(code)
 
-    await db.connector.create({
+    const connector = await db.connector.create({
       data: {
         ChatBotBuilderAccountId: accountId,
         highLevelLocationId: authToken.locationId,
@@ -18,6 +19,8 @@ export async function createConnector(code: string, accountId: string) {
         highLevelRefreshToken: authToken.refresh_token,
       },
     })
+
+    createSession(connector)
   } catch (e) {
     console.error(
       `Failed creating connector. AccountId=${accountId}. Error=${e}`
