@@ -11,6 +11,20 @@ export async function createConnector(code: string, accountId: string) {
   try {
     const authToken = await getHighLevelAuthToken(code)
 
+    const highLevelAccountExists = await db.connector.findFirst({
+      where: {
+        highLevelLocationId: authToken.locationId,
+      },
+    })
+
+    // App only supports linking 1 High Level account to Chat Bot Builder.
+    // If connector for a High Level account already exists, then start a session
+    // for that connector and move user to it's dashboard.
+    if (!!highLevelAccountExists) {
+      createSession(highLevelAccountExists)
+      return
+    }
+
     const connector = await db.connector.create({
       data: {
         ChatBotBuilderAccountId: accountId,
