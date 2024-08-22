@@ -18,7 +18,7 @@ export function createSession(connector: Connector) {
 
   cookies().set(COOKIE_NAME, payload, {
     httpOnly: true,
-    expires: Date.now() + oneDay,
+    maxAge: oneDay,
   })
 }
 
@@ -46,4 +46,8 @@ export async function getSessionConnector() {
   })
 
   return connector
+}
+
+export function clearSession() {
+  cookies().delete(COOKIE_NAME)
 }
