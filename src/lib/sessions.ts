@@ -1,6 +1,5 @@
 import { Connector } from "@prisma/client"
 import { cookies } from "next/headers"
-import db from "./db"
 
 const COOKIE_NAME = "GHLCONNECTOR"
 
@@ -30,22 +29,6 @@ export function getSession() {
   }
 
   return JSON.parse(sessionCookie.value) as AppSession
-}
-
-export async function getSessionConnector() {
-  const session = getSession()
-
-  if (!session) {
-    return null
-  }
-
-  const connector = await db.connector.findUnique({
-    where: {
-      id: session.connectorId,
-    },
-  })
-
-  return connector
 }
 
 export function clearSession() {
