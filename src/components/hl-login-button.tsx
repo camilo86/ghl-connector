@@ -20,7 +20,7 @@ export default function HighLevelLoginButton() {
       "client_id",
       process.env.NEXT_PUBLIC_HIGH_LEVEL_CLIENT_ID
     )
-    oauthUrl.searchParams.append("scope", "locations.readonly")
+    oauthUrl.searchParams.append("scope", "locations.readonly contacts.write")
 
     router.push(oauthUrl.toString())
   }

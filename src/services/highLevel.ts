@@ -17,6 +17,21 @@ export type HighLevelLocation = {
   logoUrl: string
 }
 
+type CreateHighLevelContact = {
+  firstName?: string
+  lastName?: string
+  email?: string
+  gender?: string
+  phone?: string
+  address1?: string
+  city?: string
+  state?: string
+  postalCode?: string
+  website?: string
+  timezone?: string
+  locationId: string
+}
+
 export async function getHighLevelAuthToken(code: string) {
   if (!code) {
     throw new Error("HighLevel code is required to retrieve auth token.")
@@ -43,6 +58,37 @@ export async function getHighLevelAuthToken(code: string) {
 
   if (!response.ok) {
     throw new Error("Failed to fetch HighLevel auth token.")
+  }
+
+  return (await response.json()) as HighLevelAuthToken
+}
+
+export async function refreshHighLevelAccessToken(refreshToken: string) {
+  if (!refreshToken) {
+    throw new Error("RefreshToken is required to refresh HighLevel auth token.")
+  }
+
+  const headers = new Headers()
+  headers.append("Content-Type", "application/x-www-form-urlencoded")
+
+  const response = await fetch(
+    "https://services.leadconnectorhq.com/oauth/token",
+    {
+      method: "POST",
+      body: new URLSearchParams({
+        refresh_token: refreshToken,
+        client_id: process.env.NEXT_PUBLIC_HIGH_LEVEL_CLIENT_ID,
+        client_secret: process.env.HIGH_LEVEL_SECRET,
+        grant_type: "refresh_token",
+        user_type: "Location",
+        redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/gh/auth`,
+      }),
+    }
+  )
+
+  if (!response.ok) {
+    console.error(await response.text())
+    throw new Error(`Failed to refresh HighLevel auth token.`)
   }
 
   return (await response.json()) as HighLevelAuthToken
@@ -79,4 +125,42 @@ export async function getHighLevelLocation(
   }
 
   return (await response.json())?.location as HighLevelLocation
+}
+
+export async function createHighLevelContact(
+  locationId: string,
+  accessToken: string,
+  contact: CreateHighLevelContact
+) {
+  if (!locationId) {
+    throw new Error("locationId is required to create HighLevel contact.")
+  }
+
+  if (!accessToken) {
+    throw new Error("accessToken is required to create HighLevel contact.")
+  }
+
+  if (!contact) {
+    throw new Error("contact info is required to create HighLevel contact.")
+  }
+
+  const headers = new Headers()
+  headers.append("Authorization", `Bearer ${accessToken}`)
+  headers.append("Content-Type", "application/json")
+  headers.append("Version", "2021-07-28")
+
+  const response = await fetch(
+    `https://services.leadconnectorhq.com/contacts/upsert`,
+    {
+      method: "POST",
+      body: JSON.stringify(contact),
+      headers,
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to create contact. LocationId=${locationId} Status=${response.statusText}`
+    )
+  }
 }
