@@ -2,14 +2,14 @@
 
 import db from "@/lib/db"
 import { createSession } from "@/lib/sessions"
-import { getHighLevelAuthToken } from "@/services/highLevel"
+import { HighLevelAuthToken } from "@/services/highLevel"
 import { redirect } from "next/navigation"
 
 export async function createConnector(code: string, accountId: string) {
   let nextPage = "/dashboard"
 
   try {
-    const authToken = await getHighLevelAuthToken(code)
+    const authToken = JSON.parse(atob(code)) as HighLevelAuthToken
 
     const highLevelAccountExists = await db.connector.findFirst({
       where: {
