@@ -59,24 +59,21 @@ async function handler(req: Request) {
   }
 
   try {
-    await executeConnectorAction(
-      connector,
-      (accessToken) =>
-        createHighLevelContact(connector.id, connector.highLevelAccessToken, {
-          locationId: connector.highLevelLocationId,
-          firstName: payload.first_name,
-          lastName: payload.last_name,
-          email: payload.email,
-          gender: payload.gender,
-          phone: payload.phone,
-          address1: payload.address1,
-          city: payload.city,
-          state: payload.state,
-          postalCode: payload.postalCode,
-          website: payload.website,
-          timezone: payload.timezone,
-        }),
-      true
+    await executeConnectorAction(connector, (accessToken) =>
+      createHighLevelContact(connector.id, connector.highLevelAccessToken, {
+        locationId: connector.highLevelLocationId,
+        firstName: payload.first_name,
+        lastName: payload.last_name,
+        email: payload.email,
+        gender: payload.gender,
+        phone: payload.phone,
+        address1: payload.address1,
+        city: payload.city,
+        state: payload.state,
+        postalCode: payload.postalCode,
+        website: payload.website,
+        timezone: payload.timezone,
+      })
     )
   } catch (e) {
     console.error(`Failed to create HighLevel contact. Error=${e}`)
