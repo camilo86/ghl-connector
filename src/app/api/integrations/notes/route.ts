@@ -1,6 +1,9 @@
 import db from "@/lib/db"
 import { executeConnectorAction } from "@/lib/utils"
-import { createHighLevelNote } from "@/services/highLevel"
+import {
+  createHighLevelNote,
+  HighLevelCreateResourceResponse,
+} from "@/services/highLevel"
 
 export { handler as POST }
 
@@ -56,8 +59,10 @@ async function handler(req: Request) {
     )
   }
 
+  let response: HighLevelCreateResourceResponse
+
   try {
-    await executeConnectorAction(connector, (accessToken) =>
+    response = await executeConnectorAction(connector, (accessToken) =>
       createHighLevelNote(
         connector.highLevelLocationId,
         accessToken,
@@ -81,9 +86,14 @@ async function handler(req: Request) {
     )
   }
 
-  return new Response(null, {
-    status: 204,
-  })
+  return Response.json(
+    {
+      id: response.id,
+    },
+    {
+      status: 201,
+    }
+  )
 }
 
 type CreateNoteRequestBody = {

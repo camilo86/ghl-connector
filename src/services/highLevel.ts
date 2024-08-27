@@ -1,3 +1,7 @@
+export type HighLevelCreateResourceResponse = {
+  id: string
+}
+
 export type HighLevelAuthToken = {
   access_token: string
   token_type: string
@@ -168,6 +172,10 @@ export async function createHighLevelContact(
       `Failed to create contact. LocationId=${locationId} Status=${response.statusText}`
     )
   }
+
+  return {
+    id: (await response.json()).contact.id,
+  } as HighLevelCreateResourceResponse
 }
 
 export async function createHighLevelNote(
@@ -207,4 +215,8 @@ export async function createHighLevelNote(
       `Failed to create note. LocationId=${locationId} Status=${response.statusText}`
     )
   }
+
+  return {
+    id: (await response.json()).note.id,
+  } as HighLevelCreateResourceResponse
 }

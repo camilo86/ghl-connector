@@ -1,6 +1,9 @@
 import db from "@/lib/db"
 import { executeConnectorAction } from "@/lib/utils"
-import { createHighLevelContact } from "@/services/highLevel"
+import {
+  createHighLevelContact,
+  HighLevelCreateResourceResponse,
+} from "@/services/highLevel"
 
 export { handler as POST }
 
@@ -58,8 +61,10 @@ async function handler(req: Request) {
     )
   }
 
+  let response: HighLevelCreateResourceResponse
+
   try {
-    await executeConnectorAction(connector, (accessToken) =>
+    response = await executeConnectorAction(connector, (accessToken) =>
       createHighLevelContact(connector.id, connector.highLevelAccessToken, {
         locationId: connector.highLevelLocationId,
         firstName: payload.first_name,
@@ -88,9 +93,14 @@ async function handler(req: Request) {
     )
   }
 
-  return new Response(null, {
-    status: 204,
-  })
+  return Response.json(
+    {
+      id: response.id,
+    },
+    {
+      status: 201,
+    }
+  )
 }
 
 type CreateContactRequestBody = {
