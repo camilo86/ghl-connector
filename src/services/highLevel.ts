@@ -32,6 +32,11 @@ type CreateHighLevelContact = {
   locationId: string
 }
 
+type CreateHighLevelNote = {
+  userId?: string
+  body: string
+}
+
 export async function getHighLevelAuthToken(code: string) {
   if (!code) {
     throw new Error("HighLevel code is required to retrieve auth token.")
@@ -161,6 +166,45 @@ export async function createHighLevelContact(
   if (!response.ok) {
     throw new Error(
       `Failed to create contact. LocationId=${locationId} Status=${response.statusText}`
+    )
+  }
+}
+
+export async function createHighLevelNote(
+  locationId: string,
+  accessToken: string,
+  contactId: string,
+  note: CreateHighLevelNote
+) {
+  if (!locationId) {
+    throw new Error("locationId is required to create HighLevel note.")
+  }
+
+  if (!accessToken) {
+    throw new Error("accessToken is required to create HighLevel note.")
+  }
+
+  if (!note) {
+    throw new Error("note info is required to create HighLevel note.")
+  }
+
+  const headers = new Headers()
+  headers.append("Authorization", `Bearer ${accessToken}`)
+  headers.append("Content-Type", "application/json")
+  headers.append("Version", "2021-07-28")
+
+  const response = await fetch(
+    `https://services.leadconnectorhq.com/contacts/${contactId}/notes`,
+    {
+      method: "POST",
+      body: JSON.stringify(note),
+      headers,
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to create note. LocationId=${locationId} Status=${response.statusText}`
     )
   }
 }
