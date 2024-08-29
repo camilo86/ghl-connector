@@ -9,11 +9,11 @@ import {
 
 export default function Home() {
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="flex h-screen items-center justify-center">
       <Card className="w-[400px]">
         <CardHeader>
           <CardTitle className="leading-tight">
-            HighLevel Connector for ChatBotBuilder.AI
+            HighLevel Connector for GPTBot
           </CardTitle>
           <CardDescription className="space-y-4">
             Create HighLevel contacts, notes and more from within your Chat Bot
@@ -21,8 +21,8 @@ export default function Home() {
             <br />
             <br />
             To get started, make sure you have access to both your HighLevel and
-            Chat Bot Builder AI account. Once ready, start by logging in to your
-            HighLevel account below.
+            GPTBot account. Once ready, start by logging in to your HighLevel
+            account below.
           </CardDescription>
         </CardHeader>
         <CardFooter>

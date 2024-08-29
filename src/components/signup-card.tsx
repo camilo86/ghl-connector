@@ -27,11 +27,11 @@ export function SignupCard({ code }: SignupCardProps) {
         <CardTitle className="leading-tight">Almost there.</CardTitle>
         <CardDescription className="space-y-4">
           Awesome. Now that we have your HighLevel information, let&apos;s
-          connect your Chat Bot Builder AI account.
+          connect your GPTBot account.
           <br />
           <br />
-          Grab your Chat Bot Builder AI Account ID (you can find this under the
-          account profile), and paste it below.
+          Grab your GPTBot Account ID (you can find this under the account
+          profile), and paste it below.
         </CardDescription>
       </CardHeader>
       <CardContent>
